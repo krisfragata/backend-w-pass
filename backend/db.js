@@ -1,17 +1,7 @@
-const mongoose = require('mongoose');
+const {createClient} = require('@supabase/supabase-js');
 require('dotenv').config();
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-const connectDB = async () => {
-  try{
-    await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: 'test',
-      writeConcern: { w: 'majority' },
-    })
-    console.log('connected to MongoDB')
-  }
-  catch(error){
-    console.log('Error connecting to MongoDB: ', error)
-  }
-}
-
-module.exports = connectDB;
+module.exports = supabase;

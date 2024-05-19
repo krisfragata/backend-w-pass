@@ -1,11 +1,9 @@
 const path =  require('path');
 const express= require('express');
-const connectDB = require('./db');
-
+const supabase = require('./db');
 const app = express(); //instantiates express
 const PORT = process.env.PORT || 8080; //port at which server is listening
-
-connectDB();
+const verifyPassword = require('./verifyPassword')
 
 //allows express to parse incoming data from frontend
 app.use(express.json());
@@ -13,6 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, '../public')));
+
+app.post('/secret', verifyPassword, (req, res) => {
+  return res.status(200).json({message: 'password verified succesfully'});
+})
 
 // catch-all route handler for any requests to an unknown route
 app.use((req, res) => res.status(404).send('Page not found'));
