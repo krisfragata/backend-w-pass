@@ -68,6 +68,8 @@ Goals:
 10. load static files
    `app.use(express.static(path.join(__dirname, '../public')));`
 
+### VIDEO 2
+
 ### set up database
 11. setup a supabase database
    `npm install @supabase/supabase-js`
@@ -85,13 +87,14 @@ Goals:
       const supabase = createClient(supabaseUrl, supabaseKey);
       module.exports = supaabse;
       ```
-14. invoke DB in server.js and import bcrypt
+14. import DB in server.js and import bcrypt
    ```c
    const supabase = require('./db');
    const bcrypt = require('bcrypt');
    ```
 ### Add single password to db and a func to retrieve password
 15. create a one-time function to store a hashed password to db. We will use bcrypt to store our password for security. Bcrypt is essentially an algorithm that takes in text and returns a randomly generated text. To learn more, watch: https://www.youtube.com/watch?v=O6cmuiTBZVs&t=189s
+   a. make sure that you're ensuring row-level acces in supabase just for this function
    ```c
    //in server.js
    async function storePassword(){
@@ -102,7 +105,7 @@ Goals:
 
          const {data, error} = await supabase
             .from('passwords')
-            .insert([{hashed_password: hashedPassword}])
+            .insert([{hashed_password: hashedPassword}]);
 
          if (error) {
             throw error;
@@ -115,11 +118,11 @@ Goals:
    //invoke function one time then delete
    storePassword();
    ```
-16. check if password is stored succesfully in supabase
+16. run server with command `npm run dev` and check if password is stored succesfully in supabase
 17. create a new file, verifyPassword.js and create a function that verifies user input
    ```c
    const bcrypt = require('bcrypt');
-   const supabase = require('supabase');
+   const supabase = require('./db');
 
    function serverMessage() {
       this.message = '';
@@ -129,11 +132,11 @@ Goals:
    }
 
    async function verifyPassword(req, res, next){
-      const message = new serverMessage();
+      const serverMessage = new serverMessage();
       try {
          const { password } = req.body;
          if (!password) {
-            serverMessage.newMessage = 'password is required';
+            message.newMessage('password is required')
             return res.status(400).json(serverMessage);
          } 
 
@@ -147,7 +150,7 @@ Goals:
             throw erorr;
          }
          if(!data) {
-            serverMessage.newMessage = 'Password not found';
+            message.newMessage('password not found');
             return res.status(404).json(serverMessage);
          }
 
@@ -156,7 +159,7 @@ Goals:
          //verify if password provided is a match to hashed password
          const isMatch = await bcrypt.compare(password, hashedPassword);
          if(!isMatch) {
-            serverMessage.newMessage = 'Invalid Password';
+            message.newMessage('Invalid Password');
             return res.status(401).json(serverMessage);
          }
 
