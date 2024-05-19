@@ -85,6 +85,7 @@ Goals:
       const supabaseUrl = process.env.SUPABASE_URL;
       const supabaseKey = process.env.SUPABASE_KEY;
       const supabase = createClient(supabaseUrl, supabaseKey);
+
       module.exports = supaabse;
       ```
 14. import DB in server.js and import bcrypt
@@ -131,8 +132,9 @@ Goals:
       this.message = message;
    }
 
+   const message = new serverMessage();
+
    async function verifyPassword(req, res, next){
-      const serverMessage = new serverMessage();
       try {
          const { password } = req.body;
          if (!password) {
