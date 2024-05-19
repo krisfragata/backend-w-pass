@@ -5,6 +5,8 @@ const connectDB = require('./db');
 const app = express(); //instantiates express
 const PORT = process.env.PORT || 8080; //port at which server is listening
 
+connectDB();
+
 //allows express to parse incoming data from frontend
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
