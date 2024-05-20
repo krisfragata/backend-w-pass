@@ -178,7 +178,7 @@ Goals:
 18. setup route in server.js to verify password. Import verifyPassword function
 
    ```c
-   const verifyPassword = require('./verifyPassword);
+   const verifyPassword = require('./verifyPassword');
 
    app.post('/secret', verifyPassword, (req, res) => {
       res.status(200).json({message: 'Password verified succesfully'});
@@ -186,6 +186,7 @@ Goals:
    ```
 
 19. test with postman
+   # in backend-w-pass video 03, skip 17:30-22:15, contains unnecessary debugging
    a. start your express server 
    b. use postmasn to send a POST request to 'localhost:8080/secret' with a JSON body containing the following:
    ```c
